@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SUMMIT 26 – Automation to Autonomy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── DESIGN TOKENS ──────────────────────────────────────────────────────── */
+    :root {
+      --blue:    #0066CC;
+      --cyan:    #00B4D8;
+      --orange:  #FF6B35;
+      --purple:  #6B5B95;
+      --dark:    #0B132B;
+      --dark2:   #111827;
+      --light:   #F8FAFC;
+      --muted:   #64748B;
+      --border:  rgba(0,102,204,0.15);
+
+      --grad-primary:  linear-gradient(135deg, #0066CC 0%, #00B4D8 100%);
+      --grad-warm:     linear-gradient(135deg, #FF6B35 0%, #6B5B95 100%);
+      --grad-subtle:   linear-gradient(135deg, rgba(0,102,204,0.07) 0%, rgba(0,180,216,0.07) 100%);
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 22px;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+      --shadow-md: 0 8px 32px rgba(0,102,204,0.12);
+      --shadow-lg: 0 20px 60px rgba(0,102,204,0.18);
+    }
+
+    /* ─── RESET & BASE ───────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fff;
+      color: var(--dark2);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, h5 {
+      font-family: 'Sora', sans-serif;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ─── UTILITY ────────────────────────────────────────────────────────────── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .section { padding: 100px 0; }
+    .section-label {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 20px;
+    }
+    .section-title span { background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .section-sub {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 560px;
+      line-height: 1.75;
+    }
+
+    /* ─── BUTTONS ────────────────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+      border: none;
+    }
+    .btn:hover { transform: translateY(-2px); }
+
+    .btn-primary {
+      background: var(--orange);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(255,107,53,0.35);
+    }
+    .btn-primary:hover { box-shadow: 0 8px 30px rgba(255,107,53,0.5); }
+
+    .btn-outline {
+      background: transparent;
+      color: #fff;
+      border: 2px solid rgba(255,255,255,0.6);
+    }
+    .btn-outline:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
+
+    .btn-outline-blue {
+      background: transparent;
+      color: var(--blue);
+      border: 2px solid var(--blue);
+    }
+    .btn-outline-blue:hover { background: var(--blue); color: #fff; }
+
+    .btn-orange-lg {
+      background: var(--grad-warm);
+      color: #fff;
+      padding: 16px 42px;
+      font-size: 1.05rem;
+      box-shadow: 0 6px 28px rgba(255,107,53,0.4);
+    }
+    .btn-orange-lg:hover { box-shadow: 0 12px 40px rgba(255,107,53,0.55); }
+
+    /* ─── NAVBAR ─────────────────────────────────────────────────────────────── */
+    #navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 18px 0;
+      transition: background 0.35s ease, box-shadow 0.35s ease, padding 0.35s ease;
+    }
+    #navbar.scrolled {
+      background: rgba(11,19,43,0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 2px 30px rgba(0,0,0,0.25);
+      padding: 12px 0;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Sora', sans-serif;
+      font-weight: 800;
+      font-size: 1.25rem;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+    .nav-logo span { color: var(--cyan); }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: rgba(255,255,255,0.8);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-cta { margin-left: 8px; }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: #fff;
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ─── HERO ───────────────────────────────────────────────────────────────── */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      background: var(--dark);
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #0B132B 0%, #0D2353 50%, #0B2D5E 100%);
+    }
+    /* Animated grid */
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,180,216,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,180,216,0.08) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 30%, transparent 100%);
+    }
+    /* Glowing orbs */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.35;
+      animation: float 8s ease-in-out infinite;
+    }
+    .orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, #0066CC, transparent); top: -200px; right: -100px; animation-delay: 0s; }
+    .orb-2 { width: 400px; height: 400px; background: radial-gradient(circle, #00B4D8, transparent); bottom: -100px; left: -80px; animation-delay: -3s; }
+    .orb-3 { width: 300px; height: 300px; background: radial-gradient(circle, #6B5B95, transparent); top: 40%; right: 20%; animation-delay: -5s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-30px) scale(1.05); }
+    }
+
+    /* Abstract tech lines */
+    .hero-decoration {
+      position: absolute;
+      right: 5%;
+      top: 50%;
+      transform: translateY(-50%);
+      width: min(500px, 45vw);
+      height: min(500px, 45vw);
+      opacity: 0.6;
+    }
+    .hero-content { position: relative; z-index: 2; padding-top: 100px; }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,180,216,0.15);
+      border: 1px solid rgba(0,180,216,0.3);
+      color: var(--cyan);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 8px 18px;
+      border-radius: 50px;
+      margin-bottom: 30px;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--cyan);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.4); }
+    }
+    .hero-title {
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      font-weight: 800;
+      color: #fff;
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      margin-bottom: 16px;
+    }
+    .hero-title .gradient-text {
+      background: var(--grad-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-year {
+      display: block;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 300;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.15em;
+      margin-bottom: 8px;
+    }
+    .hero-motto {
+      font-size: clamp(1.1rem, 2vw, 1.5rem);
+      font-weight: 400;
+      color: var(--cyan);
+      letter-spacing: 0.06em;
+      margin-bottom: 32px;
+    }
+    .hero-desc {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.65);
+      max-width: 520px;
+      line-height: 1.8;
+      margin-bottom: 48px;
+    }
+    .hero-buttons { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+    .hero-meta {
+      margin-top: 72px;
+      display: flex;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+    .hero-stat { }
+    .hero-stat-num {
+      display: block;
+      font-family: 'Sora', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      color: #fff;
+    }
+    .hero-stat-num span { color: var(--cyan); }
+    .hero-stat-label {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 0.05em;
+    }
+    .hero-scroll {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,0.4);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      animation: bounce 2.5s ease-in-out infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+    .scroll-arrow {
+      width: 24px; height: 24px;
+      border-right: 2px solid rgba(255,255,255,0.4);
+      border-bottom: 2px solid rgba(255,255,255,0.4);
+      transform: rotate(45deg);
+      margin-top: -4px;
+    }
+
+    /* ─── ABOUT ──────────────────────────────────────────────────────────────── */
+    #about {
+      background: var(--grad-subtle);
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .about-topics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 28px 0 36px;
+    }
+    .topic-tag {
+      background: rgba(0,102,204,0.08);
+      border: 1px solid rgba(0,102,204,0.2);
+      color: var(--blue);
+      padding: 6px 16px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .topic-tag:hover { background: var(--blue); color: #fff; }
+    .about-cards { display: flex; flex-direction: column; gap: 20px; }
+    .feature-card {
+      background: #fff;
+      border-radius: var(--radius-md);
+      padding: 28px;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border);
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .feature-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .feature-icon {
+      width: 52px; height: 52px;
+      border-radius: var(--radius-sm);
+      background: var(--grad-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 1.4rem;
+    }
+    .feature-card h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 6px;
+    }
+    .feature-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+    .cyan-line {
+      width: 48px;
+      height: 3px;
+      background: var(--grad-primary);
+      border-radius: 2px;
+      margin: 16px 0;
+    }
+
+    /* ─── AGENDA ─────────────────────────────────────────────────────────────── */
+    #agenda { background: #fff; }
+    .agenda-header { text-align: center; margin-bottom: 64px; }
+    .agenda-header .section-sub { margin: 0 auto; }
+    .agenda-timeline {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .timeline-line {
+      position: absolute;
+      left: 90px;
+      top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--blue), var(--cyan));
+      opacity: 0.2;
+    }
+    .agenda-item {
+      display: flex;
+      gap: 32px;
+      margin-bottom: 32px;
+      position: relative;
+    }
+    .agenda-time {
+      min-width: 80px;
+      text-align: right;
+      padding-top: 22px;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--blue);
+    }
+    .timeline-dot {
+      position: relative;
+      z-index: 1;
+      width: 18px;
+      height: 18px;
+      background: var(--grad-primary);
+      border-radius: 50%;
+      margin-top: 24px;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 4px rgba(0,102,204,0.12);
+    }
+    .agenda-card {
+      flex: 1;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 22px 28px;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      cursor: default;
+    }
+    .agenda-card:hover {
+      transform: translateX(6px);
+      box-shadow: var(--shadow-md);
+      border-color: rgba(0,102,204,0.3);
+    }
+    .agenda-card-tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 50px;
+      margin-bottom: 10px;
+    }
+    .tag-keynote { background: rgba(0,102,204,0.1); color: var(--blue); }
+    .tag-workshop { background: rgba(107,91,149,0.1); color: var(--purple); }
+    .tag-break { background: rgba(0,180,216,0.1); color: var(--cyan); }
+    .tag-panel { background: rgba(255,107,53,0.1); color: var(--orange); }
+    .tag-session { background: rgba(0,102,204,0.08); color: var(--blue); }
+    .agenda-card h4 { font-size: 1.05rem; font-weight: 700; color: var(--dark); margin-bottom: 6px; }
+    .agenda-card .speaker-ref { font-size: 0.85rem; color: var(--cyan); font-weight: 500; margin-bottom: 8px; }
+    .agenda-card p { font-size: 0.87rem; color: var(--muted); line-height: 1.6; }
+
+    /* ─── SPEAKERS ───────────────────────────────────────────────────────────── */
+    #speakers { background: var(--grad-subtle); }
+    .speakers-header { text-align: center; margin-bottom: 64px; }
+    .speakers-header .section-sub { margin: 0 auto; }
+    .speakers-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 28px;
+    }
+    .speaker-card {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      padding: 32px 24px;
+      text-align: center;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .speaker-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-lg);
+      padding: 2px;
+      background: var(--grad-warm);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .speaker-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); }
+    .speaker-card:hover::before { opacity: 1; }
+    .speaker-avatar {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      background: var(--grad-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 800;
+      color: #fff;
+      font-family: 'Sora', sans-serif;
+      position: relative;
+    }
+    .speaker-avatar-ring {
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      background: var(--grad-warm);
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .speaker-card:hover .speaker-avatar-ring { opacity: 1; }
+    .speaker-card h4 { font-size: 1rem; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+    .speaker-role { font-size: 0.82rem; color: var(--cyan); font-weight: 500; margin-bottom: 4px; }
+    .speaker-company { font-size: 0.82rem; color: var(--muted); margin-bottom: 12px; }
+    .speaker-bio { font-size: 0.83rem; color: var(--muted); line-height: 1.6; margin-bottom: 18px; }
+    .speaker-links { display: flex; justify-content: center; gap: 12px; }
+    .speaker-link {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: rgba(0,102,204,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--blue);
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+    .speaker-link:hover { background: var(--blue); color: #fff; }
+
+    /* ─── REGISTER ───────────────────────────────────────────────────────────── */
+    #register {
+      background: var(--dark);
+      position: relative;
+      overflow: hidden;
+    }
+    .register-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #0B132B 0%, #1a1040 50%, #0d2353 100%);
+    }
+    .register-orb-1 {
+      position: absolute;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(255,107,53,0.15), transparent);
+      border-radius: 50%;
+      top: -200px; right: -100px;
+      filter: blur(60px);
+    }
+    .register-orb-2 {
+      position: absolute;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(107,91,149,0.2), transparent);
+      border-radius: 50%;
+      bottom: -150px; left: -80px;
+      filter: blur(60px);
+    }
+    .register-inner {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .register-left { padding-top: 12px; }
+    .register-left .section-label { color: var(--orange); }
+    .register-left .section-title { color: #fff; }
+    .register-left .section-sub { color: rgba(255,255,255,0.6); }
+    .register-features { margin-top: 40px; display: flex; flex-direction: column; gap: 18px; }
+    .register-feature {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: rgba(255,255,255,0.8);
+      font-size: 0.95rem;
+    }
+    .register-feature-icon {
+      width: 36px; height: 36px;
+      border-radius: var(--radius-sm);
+      background: rgba(255,107,53,0.15);
+      border: 1px solid rgba(255,107,53,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .register-right {
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+    }
+    .form-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 28px;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label {
+      display: block;
+      font-size: 0.83rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 7px;
+      letter-spacing: 0.03em;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.92rem;
+      transition: border-color 0.2s, background 0.2s;
+      outline: none;
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: rgba(255,255,255,0.3); }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--cyan);
+      background: rgba(0,180,216,0.06);
+    }
+    .form-group select option { background: var(--dark2); color: #fff; }
+    .form-group textarea { resize: vertical; min-height: 110px; }
+    .form-submit { width: 100%; justify-content: center; padding: 16px; font-size: 1rem; }
+    .form-note {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.35);
+    }
+
+    /* ─── CONTACT / FAQ ──────────────────────────────────────────────────────── */
+    #contact { background: #fff; }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .contact-items { display: flex; flex-direction: column; gap: 24px; margin-top: 32px; }
+    .contact-item {
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+    }
+    .contact-icon {
+      width: 48px; height: 48px;
+      border-radius: var(--radius-sm);
+      background: var(--grad-subtle);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .contact-item h5 { font-size: 0.9rem; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+    .contact-item p { font-size: 0.87rem; color: var(--muted); }
+    .contact-item a { color: var(--cyan); transition: color 0.2s; }
+    .contact-item a:hover { color: var(--blue); }
+    .faq { }
+    .faq-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 28px;
+    }
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+    }
+    .faq-question {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 0;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--dark);
+      transition: color 0.2s;
+      gap: 16px;
+    }
+    .faq-question:hover { color: var(--blue); }
+    .faq-icon {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      background: var(--grad-subtle);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--blue);
+      flex-shrink: 0;
+      transition: transform 0.3s, background 0.3s;
+    }
+    .faq-item.open .faq-icon {
+      transform: rotate(45deg);
+      background: var(--grad-primary);
+      color: #fff;
+    }
+    .faq-answer {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.35s ease, padding 0.35s ease;
+    }
+    .faq-item.open .faq-answer { max-height: 200px; }
+    .faq-answer p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.75;
+      padding-bottom: 18px;
+    }
+    .social-links { display: flex; gap: 12px; margin-top: 36px; }
+    .social-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 50px;
+      border: 1.5px solid var(--border);
+      color: var(--dark2);
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .social-btn:hover { border-color: var(--blue); color: var(--blue); background: rgba(0,102,204,0.04); }
+
+    /* ─── FOOTER ─────────────────────────────────────────────────────────────── */
+    footer {
+      background: var(--dark);
+      padding: 72px 0 36px;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      margin-bottom: 36px;
+    }
+    .footer-brand .nav-logo { font-size: 1.4rem; margin-bottom: 12px; display: block; }
+    .footer-brand p { font-size: 0.87rem; color: rgba(255,255,255,0.4); line-height: 1.7; max-width: 260px; }
+    .footer-social { display: flex; gap: 10px; margin-top: 24px; }
+    .footer-social-btn {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    .footer-social-btn:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .footer-col h5 {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 20px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .footer-col ul li a {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.55);
+      transition: color 0.2s;
+    }
+    .footer-col ul li a:hover { color: var(--cyan); }
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-bottom p { font-size: 0.83rem; color: rgba(255,255,255,0.25); }
+    .footer-bottom-links { display: flex; gap: 24px; }
+    .footer-bottom-links a { font-size: 0.83rem; color: rgba(255,255,255,0.3); transition: color 0.2s; }
+    .footer-bottom-links a:hover { color: var(--cyan); }
+
+    /* ─── BACK TO TOP ────────────────────────────────────────────────────────── */
+    #back-to-top {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      width: 44px; height: 44px;
+      background: var(--grad-primary);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+      box-shadow: var(--shadow-md);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+      cursor: pointer;
+      z-index: 999;
+      border: none;
+      font-size: 1.1rem;
+    }
+    #back-to-top.visible { opacity: 1; pointer-events: all; }
+    #back-to-top:hover { transform: translateY(-3px); }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .speakers-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .section { padding: 72px 0; }
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: var(--dark);
+        z-index: 999;
+        align-items: center;
+        justify-content: center;
+        gap: 36px;
+      }
+      .nav-links.open a { font-size: 1.5rem; }
+      .nav-links.open .nav-cta { margin-left: 0; }
+      .hamburger { display: flex; z-index: 1000; }
+      .about-grid { grid-template-columns: 1fr; gap: 48px; }
+      .register-inner { grid-template-columns: 1fr; gap: 48px; }
+      .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
+      .footer-top > :first-child { grid-column: 1 / -1; }
+      .timeline-line { left: 72px; }
+      .agenda-time { min-width: 64px; font-size: 0.82rem; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 540px) {
+      .speakers-grid { grid-template-columns: 1fr 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+      .hero-meta { gap: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     NAVBAR
+════════════════════════════════════════════════════════════════════════════ -->
+<nav id="navbar">
+  <div class="container nav-inner">
+    <a href="#" class="nav-logo">SUMMIT<span>26</span></a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#agenda">Agenda</a></li>
+      <li><a href="#speakers">Speakers</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li class="nav-cta"><a href="#register" class="btn btn-primary" style="padding:10px 24px;font-size:0.85rem;">Register Now</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     HERO
+════════════════════════════════════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- Tech illustration SVG -->
+  <svg class="hero-decoration" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <circle cx="250" cy="250" r="200" stroke="rgba(0,180,216,0.15)" stroke-width="1"/>
+    <circle cx="250" cy="250" r="150" stroke="rgba(0,102,204,0.2)" stroke-width="1" stroke-dasharray="8 6"/>
+    <circle cx="250" cy="250" r="100" stroke="rgba(0,180,216,0.25)" stroke-width="1.5"/>
+    <circle cx="250" cy="250" r="50" stroke="rgba(0,102,204,0.4)" stroke-width="2"/>
+    <circle cx="250" cy="250" r="12" fill="rgba(0,180,216,0.6)"/>
+    <!-- orbit nodes -->
+    <circle cx="250" cy="50"  r="7" fill="#0066CC" opacity="0.8"/>
+    <circle cx="450" cy="250" r="7" fill="#00B4D8" opacity="0.8"/>
+    <circle cx="250" cy="450" r="7" fill="#6B5B95" opacity="0.8"/>
+    <circle cx="50"  cy="250" r="7" fill="#FF6B35" opacity="0.8"/>
+    <!-- lines -->
+    <line x1="250" y1="50"  x2="250" y2="200" stroke="rgba(0,180,216,0.3)" stroke-width="1"/>
+    <line x1="450" y1="250" x2="300" y2="250" stroke="rgba(0,102,204,0.3)" stroke-width="1"/>
+    <line x1="250" y1="450" x2="250" y2="300" stroke="rgba(107,91,149,0.3)" stroke-width="1"/>
+    <line x1="50"  y1="250" x2="200" y2="250" stroke="rgba(255,107,53,0.3)" stroke-width="1"/>
+    <!-- corner connectors -->
+    <line x1="50" y1="50" x2="200" y2="200" stroke="rgba(0,180,216,0.1)" stroke-width="1"/>
+    <line x1="450" y1="50" x2="300" y2="200" stroke="rgba(0,180,216,0.1)" stroke-width="1"/>
+    <!-- Node labels -->
+    <text x="258" y="47" fill="rgba(0,180,216,0.7)" font-size="10" font-family="Inter">AI</text>
+    <text x="460" y="255" fill="rgba(0,180,216,0.7)" font-size="10" font-family="Inter">IoT</text>
+    <text x="220" y="470" fill="rgba(107,91,149,0.7)" font-size="10" font-family="Inter">ML</text>
+    <text x="18"  y="255" fill="rgba(255,107,53,0.7)" font-size="10" font-family="Inter">RPA</text>
+    <!-- small data points -->
+    <circle cx="160" cy="160" r="4" fill="rgba(0,180,216,0.4)"/>
+    <circle cx="340" cy="160" r="4" fill="rgba(0,180,216,0.4)"/>
+    <circle cx="340" cy="340" r="4" fill="rgba(0,180,216,0.4)"/>
+    <circle cx="160" cy="340" r="4" fill="rgba(0,180,216,0.4)"/>
+  </svg>
+
+  <div class="container hero-content">
+    <div class="hero-badge">📅 &nbsp;September 18–19, 2026 · Munich</div>
+    <span class="hero-year">THE CONFERENCE FOR</span>
+    <h1 class="hero-title">
+      <span class="gradient-text">SUMMIT</span><br>
+      <span style="color:#fff;">26</span>
+    </h1>
+    <p class="hero-motto">Automation to Autonomy</p>
+    <p class="hero-desc">
+      Discover how automation evolves into true autonomy.<br>
+      Join leaders, engineers and innovators shaping the next generation of intelligent systems.
+    </p>
+    <div class="hero-buttons">
+      <a href="#register" class="btn btn-primary">Register Now &rarr;</a>
+      <a href="#agenda" class="btn btn-outline">View Agenda</a>
+    </div>
+    <div class="hero-meta">
+      <div class="hero-stat">
+        <span class="hero-stat-num">50<span>+</span></span>
+        <span class="hero-stat-label">Speakers</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">2<span>k</span></span>
+        <span class="hero-stat-label">Attendees</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">3<span>0+</span></span>
+        <span class="hero-stat-label">Sessions</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">2</span>
+        <span class="hero-stat-label">Days</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">
+    <span>Scroll</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     ABOUT
+════════════════════════════════════════════════════════════════════════════ -->
+<section id="about" class="section">
+  <div class="container">
+    <div class="about-grid">
+      <div>
+        <span class="section-label">About the Event</span>
+        <h2 class="section-title">Where Automation<br><span>meets Intelligence</span></h2>
+        <div class="cyan-line"></div>
+        <p class="section-sub">
+          SUMMIT 26 brings together the brightest minds in technology to explore how automation is evolving beyond rule-based systems into truly intelligent, autonomous architectures.
+        </p>
+        <div class="about-topics">
+          <span class="topic-tag">Automation</span>
+          <span class="topic-tag">AI Systems</span>
+          <span class="topic-tag">Autonomous Tech</span>
+          <span class="topic-tag">Digital Transformation</span>
+          <span class="topic-tag">Intelligent Infrastructure</span>
+          <span class="topic-tag">Machine Learning</span>
+        </div>
+        <a href="#register" class="btn btn-outline-blue">Join the Summit &rarr;</a>
+      </div>
+      <div class="about-cards">
+        <div class="feature-card">
+          <div class="feature-icon">⚙️</div>
+          <div>
+            <h4>Automation Systems</h4>
+            <p>Explore next-generation automation frameworks that scale from simple workflows to complex enterprise operations.</p>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🤖</div>
+          <div>
+            <h4>AI Decision Making</h4>
+            <p>Deep dives into how AI models learn to make decisions independently, reducing human intervention at scale.</p>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌐</div>
+          <div>
+            <h4>Autonomous Infrastructure</h4>
+            <p>Self-healing systems, zero-touch deployments and intelligent operations that run without constant oversight.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     AGENDA
+════════════════════════════════════════════════════════════════════════════ -->
+<section id="agenda" class="section">
+  <div class="container">
+    <div class="agenda-header">
+      <span class="section-label">Program</span>
+      <h2 class="section-title">Conference <span>Agenda</span></h2>
+      <p class="section-sub">Two full days packed with keynotes, deep-dive sessions, workshops, and networking.</p>
+    </div>
+
+    <!-- Day 1 -->
+    <h3 style="text-align:center;font-size:1rem;font-weight:600;color:var(--blue);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:36px;">
+      Day 1 &mdash; September 18
+    </h3>
+    <div class="agenda-timeline">
+      <div class="timeline-line"></div>
+
+      <div class="agenda-item">
+        <div class="agenda-time">09:00</div>
+        <div class="timeline-dot"></div>
+        <div class="agenda-card">
+          <span class="agenda-card-tag tag-session">Opening</span>
+          <h4>Registration &amp; Welcome Coffee</h4>
+          <p>Doors open. Pick up your badge, explore the exhibition area and connect with early arrivals.</p>
+        </div>
+      </div>
+
+      <div class="agenda-item">
+        <div class="agenda-time">10:00</div>
+        <div class="timeline-dot"></div>
+        <div class="agenda-card">
+          <span class="agenda-card-tag tag-keynote">Keynote</span>
+          <h4>The Future of Autonomous Systems</h4>
+          <div class="speaker-ref">Dr. Sarah Chen &mdash; Head of AI Research, Nexus Labs</div>
+          <p>A panoramic view of where automation ends and true machine autonomy begins — and what it means for every industry.</p>
+        </div>
+      </div>
+
+      <div class="agenda-item">
+        <div class="agenda-time">11:30</div>
+        <div class="timeline-dot"></div>
+        <div class="agenda-card">
+          <span class="agenda-card-tag tag-session">Session</span>
+          <h4>AI-Driven Automation at Scale</h4>
+          <div class="speaker-ref">Marcus Weber &mdash; CTO, AutomateAI GmbH</div>
+          <p>Real-world case studies on deploying AI automation across thousands of nodes without losing control or auditability.</p>
+        </div>
+      </div>
+
+      <div class="agenda-item">
+        <div class="agenda-time">13:00</div>
+        <div class="timeline-dot"></div>
+        <div class="agenda-card">
+          <span class="agenda-card-tag tag-break">Lunch</span>
+          <h4>Lunch &amp; Networking</h4>
+          <p>Curated lunch with themed networking tables. Meet speakers and attendees in a structured open format.</p>
+        </div>
+      </div>
+
+      <div class="agenda-item">
+        <div class="agenda-time">14:00</div>
+        <div class="timeline-dot"></div>
+        <div class="agenda-card">
+          <span class="agenda-card-tag tag-workshop">Workshop</span>
+          <h4>From Automation to Autonomy — Hands-On Lab</h4>
+          <div class="speaker-ref">Elena Rossi &mdash; Principal Engineer, CloudMind</div>
+          <p>Build an end-to-end autonomous decision pipeline using modern LLM agents and orchestration frameworks.</p>
+        </div>
+      </div>
+
+      <div class="agenda-item">
+        <div class="agenda-time">16:00</div>
+        <div class="timeline-dot"></div>
+        <div class="agenda-card">
+          <span class="agenda-card-tag tag-panel">Panel</span>
+          <h4>Ethics &amp; Governance in Autonomous AI</h4>
+          <div class="speaker-ref">Moderated Panel &mdash; 5 Industry Leaders</div>
+          <p>When machines make decisions, who is responsible? A frank panel discussion on accountability, transparency, and regulation.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Day 2 -->
+    <h3 style="text-align:center;font-size:1rem;font-weight:600;color:var(--blue);letter-spacing:0.08em;text-transform:uppercase;margin:56px 0 36px;">
+      Day 2 &mdash; September 19
+    </h3>
+    <div class="agenda-timeline">
+      <div class="timeline-line"></div>
+
+      <div class="agenda-item">
+        <div class="agenda-time">09:30</div>
+        <div class="timeline-dot"></div>
+        <div class="agenda-card">
+          <span class="agenda-card-tag tag-keynote">Keynote</span>
+          <h4>Intelligent Infrastructure: Self-Healing Systems</h4>
+          <div class="speaker-ref">James Park &mdash; VP Engineering, DataFlow Corp</div>
+          <p>How the world's largest platforms are adopting zero-touch infrastructure and what the rest of us can learn from them.</p>
+        </div>
+      </div>
+
+      <div class="agenda-item">
+        <div class="agenda-time">11:00</div>
+        <div class="timeline-dot"></div>
+        <div class="agenda-card">
+          <span class="agenda-card-tag tag-session">Session</span>
+          <h4>The Autonomous Enterprise: A Blueprint</h4>
+          <div class="speaker-ref">Dr. Priya Sharma &mdash; Chief Strategy Officer, FutureTech</div>
+          <p>Organizational and technological strategies for enterprises aiming to fully automate core operations by 2030.</p>
+        </div>
+      </div>
+
+      <div class="agenda-item">
+        <div class="agenda-time">13:00</div>
+        <div class="timeline-dot"></div>
+        <div class="agenda-card">
+          <span class="agenda-card-tag tag-break">Lunch</span>
+          <h4>Networking Lunch &amp; Demo Floor</h4>
+          <p>Live product demonstrations from leading vendors and startups in the autonomous technology space.</p>
+        </div>
+      </div>
+
+      <div class="agenda-item">
+        <div class="agenda-time">14:30</div>
+        <div class="timeline-dot"></div>
+        <div class="agenda-card">
+          <span class="agenda-card-tag tag-workshop">Workshop</span>
+          <h4>Multi-Agent Systems — Building Collaborative AI</h4>
+          <div class="speaker-ref">Elena Rossi &amp; James Park</div>
+          <p>Design patterns for coordinating multiple autonomous agents to solve complex, multi-step problems reliably.</p>
+        </div>
+      </div>
+
+      <div class="agenda-item">
+        <div class="agenda-time">16:30</div>
+        <div class="timeline-dot"></div>
+        <div class="agenda-card">
+          <span class="agenda-card-tag tag-panel">Closing</span>
+          <h4>Closing Keynote &amp; Award Ceremony</h4>
+          <div class="speaker-ref">All Speakers</div>
+          <p>Highlights, community awards, and a preview of what to expect at SUMMIT 27.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     SPEAKERS
+════════════════════════════════════════════════════════════════════════════ -->
+<section id="speakers" class="section">
+  <div class="container">
+    <div class="speakers-header">
+      <span class="section-label">Lineup</span>
+      <h2 class="section-title">Meet the <span>Speakers</span></h2>
+      <p class="section-sub">World-class practitioners, researchers, and innovators at the forefront of intelligent systems.</p>
+    </div>
+    <div class="speakers-grid">
+
+      <div class="speaker-card">
+        <div class="speaker-avatar">
+          <div class="speaker-avatar-ring"></div>
+          SC
+        </div>
+        <h4>Dr. Sarah Chen</h4>
+        <div class="speaker-role">Head of AI Research</div>
+        <div class="speaker-company">Nexus Labs</div>
+        <p class="speaker-bio">Pioneer in autonomous decision systems with 15+ years shaping enterprise AI at scale.</p>
+        <div class="speaker-links">
+          <a href="#" class="speaker-link" title="LinkedIn">in</a>
+          <a href="#" class="speaker-link" title="X / Twitter">𝕏</a>
+        </div>
+      </div>
+
+      <div class="speaker-card">
+        <div class="speaker-avatar" style="background:var(--grad-warm);">
+          MW
+        </div>
+        <h4>Marcus Weber</h4>
+        <div class="speaker-role">Chief Technology Officer</div>
+        <div class="speaker-company">AutomateAI GmbH</div>
+        <p class="speaker-bio">Architect of automation platforms handling 10M+ daily decisions across logistics and finance.</p>
+        <div class="speaker-links">
+          <a href="#" class="speaker-link" title="LinkedIn">in</a>
+          <a href="#" class="speaker-link" title="X / Twitter">𝕏</a>
+        </div>
+      </div>
+
+      <div class="speaker-card">
+        <div class="speaker-avatar" style="background:linear-gradient(135deg,#6B5B95,#00B4D8);">
+          ER
+        </div>
+        <h4>Elena Rossi</h4>
+        <div class="speaker-role">Principal Engineer</div>
+        <div class="speaker-company">CloudMind</div>
+        <p class="speaker-bio">Leading engineer behind open-source LLM orchestration frameworks used by 40,000+ developers.</p>
+        <div class="speaker-links">
+          <a href="#" class="speaker-link" title="LinkedIn">in</a>
+          <a href="#" class="speaker-link" title="GitHub">⌥</a>
+        </div>
+      </div>
+
+      <div class="speaker-card">
+        <div class="speaker-avatar" style="background:linear-gradient(135deg,#00B4D8,#0066CC);">
+          JP
+        </div>
+        <h4>James Park</h4>
+        <div class="speaker-role">VP Engineering</div>
+        <div class="speaker-company">DataFlow Corp</div>
+        <p class="speaker-bio">Designed self-healing infrastructure for one of the world's top 10 most-visited platforms.</p>
+        <div class="speaker-links">
+          <a href="#" class="speaker-link" title="LinkedIn">in</a>
+          <a href="#" class="speaker-link" title="X / Twitter">𝕏</a>
+        </div>
+      </div>
+
+      <div class="speaker-card">
+        <div class="speaker-avatar" style="background:linear-gradient(135deg,#FF6B35,#FFB347);">
+          PS
+        </div>
+        <h4>Dr. Priya Sharma</h4>
+        <div class="speaker-role">Chief Strategy Officer</div>
+        <div class="speaker-company">FutureTech</div>
+        <p class="speaker-bio">Strategy architect helping Fortune 500 companies navigate the transition to autonomous operations.</p>
+        <div class="speaker-links">
+          <a href="#" class="speaker-link" title="LinkedIn">in</a>
+          <a href="#" class="speaker-link" title="X / Twitter">𝕏</a>
+        </div>
+      </div>
+
+      <div class="speaker-card">
+        <div class="speaker-avatar" style="background:linear-gradient(135deg,#6B5B95,#FF6B35);">
+          TM
+        </div>
+        <h4>Thomas Müller</h4>
+        <div class="speaker-role">Director of Robotics</div>
+        <div class="speaker-company">IndustrialAI AG</div>
+        <p class="speaker-bio">Brings autonomous robotics from research labs to factory floors with measurable ROI.</p>
+        <div class="speaker-links">
+          <a href="#" class="speaker-link" title="LinkedIn">in</a>
+        </div>
+      </div>
+
+      <div class="speaker-card">
+        <div class="speaker-avatar" style="background:linear-gradient(135deg,#0066CC,#6B5B95);">
+          AK
+        </div>
+        <h4>Aiko Kimura</h4>
+        <div class="speaker-role">Research Scientist</div>
+        <div class="speaker-company">Autonomous Systems Lab</div>
+        <p class="speaker-bio">Published researcher in reinforcement learning and multi-agent coordination with 80+ citations.</p>
+        <div class="speaker-links">
+          <a href="#" class="speaker-link" title="LinkedIn">in</a>
+          <a href="#" class="speaker-link" title="Scholar">◉</a>
+        </div>
+      </div>
+
+      <div class="speaker-card">
+        <div class="speaker-avatar" style="background:linear-gradient(135deg,#00B4D8,#FF6B35);">
+          RL
+        </div>
+        <h4>Raphaël Laurent</h4>
+        <div class="speaker-role">Head of AI Ethics</div>
+        <div class="speaker-company">EthicsFirst Foundation</div>
+        <p class="speaker-bio">Advises the EU and G20 on frameworks for responsible deployment of autonomous technologies.</p>
+        <div class="speaker-links">
+          <a href="#" class="speaker-link" title="LinkedIn">in</a>
+          <a href="#" class="speaker-link" title="X / Twitter">𝕏</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     REGISTER
+════════════════════════════════════════════════════════════════════════════ -->
+<section id="register" class="section">
+  <div class="register-bg"></div>
+  <div class="register-orb-1"></div>
+  <div class="register-orb-2"></div>
+  <div class="container register-inner">
+    <div class="register-left">
+      <span class="section-label">Join Us</span>
+      <h2 class="section-title" style="color:#fff;">Register for<br><span style="-webkit-text-fill-color:unset;background:var(--grad-warm);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">SUMMIT 26</span></h2>
+      <p class="section-sub">
+        Secure your spot at the most important autonomous technology conference of 2026. Places are limited — register today.
+      </p>
+      <div class="register-features">
+        <div class="register-feature">
+          <div class="register-feature-icon">🎟️</div>
+          Full 2-day conference access including workshops
+        </div>
+        <div class="register-feature">
+          <div class="register-feature-icon">🍽️</div>
+          Catered lunches and networking dinners
+        </div>
+        <div class="register-feature">
+          <div class="register-feature-icon">📄</div>
+          All session recordings and materials
+        </div>
+        <div class="register-feature">
+          <div class="register-feature-icon">🤝</div>
+          Exclusive speaker meet &amp; greet sessions
+        </div>
+      </div>
+    </div>
+    <div class="register-right">
+      <p class="form-title">Register &amp; Get in Touch</p>
+      <form id="register-form" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fname">First Name</label>
+            <input type="text" id="fname" name="fname" placeholder="Jane" required />
+          </div>
+          <div class="form-group">
+            <label for="lname">Last Name</label>
+            <input type="text" id="lname" name="lname" placeholder="Doe" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="jane@company.com" required />
+        </div>
+        <div class="form-group">
+          <label for="company">Company</label>
+          <input type="text" id="company" name="company" placeholder="Acme Corp" />
+        </div>
+        <div class="form-group">
+          <label for="role">Your Role</label>
+          <select id="role" name="role">
+            <option value="" disabled selected>Select your role…</option>
+            <option>Engineer / Developer</option>
+            <option>Product Manager</option>
+            <option>CTO / VP Engineering</option>
+            <option>CEO / Founder</option>
+            <option>Researcher / Scientist</option>
+            <option>Investor</option>
+            <option>Student</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="message">Message or Questions (optional)</label>
+          <textarea id="message" name="message" placeholder="Anything you'd like to know about the summit…"></textarea>
+        </div>
+        <button type="submit" class="btn btn-orange-lg form-submit">Register Now &rarr;</button>
+        <p class="form-note">We'll confirm your registration within 24 hours.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     CONTACT / FAQ
+════════════════════════════════════════════════════════════════════════════ -->
+<section id="contact" class="section">
+  <div class="container">
+    <div class="contact-grid">
+      <div>
+        <span class="section-label">Questions?</span>
+        <h2 class="section-title">Get in <span>Touch</span></h2>
+        <p class="section-sub">Have questions about the event? Send us a message and our team will get back to you within one business day.</p>
+        <div class="contact-items">
+          <div class="contact-item">
+            <div class="contact-icon">📧</div>
+            <div>
+              <h5>Email</h5>
+              <p><a href="mailto:hello@summit26.com">hello@summit26.com</a></p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">📍</div>
+            <div>
+              <h5>Location</h5>
+              <p>Munich Convention Center<br>Am Messesee 2, 81829 München</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">📅</div>
+            <div>
+              <h5>Date</h5>
+              <p>September 18 – 19, 2026</p>
+            </div>
+          </div>
+        </div>
+        <div class="social-links">
+          <a href="#" class="social-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            LinkedIn
+          </a>
+          <a href="#" class="social-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            Twitter / X
+          </a>
+        </div>
+      </div>
+      <div class="faq">
+        <h3 class="faq-title">Frequently Asked Questions</h3>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Who is SUMMIT 26 for?
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <p>SUMMIT 26 is designed for engineers, product leaders, CTOs, researchers, and anyone working on or investing in automation, AI, and autonomous systems technologies.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Where exactly is the event held?
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <p>The conference takes place at the Munich Convention Center (Messe München), one of Europe's largest and best-connected conference venues, with direct access from the city center by U-Bahn.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Will sessions be recorded?
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <p>Yes. All keynotes and main stage sessions will be recorded and made available to registered attendees within 2 weeks of the event. Workshop recordings are available to workshop ticket holders.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Is there a student or startup discount?
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <p>Yes, we offer a 40% discount for students with valid university ID, and a startup rate for companies under 2 years old with fewer than 10 employees. Use the message field in the registration form to request this.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            How do I become a sponsor or speaker?
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <p>Sponsorship packages and speaking applications are open. Please reach out directly at hello@summit26.com with your proposal or company details.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════════════════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo">SUMMIT<span>26</span></a>
+        <p>The premier conference on automation, autonomous systems, and the future of intelligent technology. September 18–19, 2026 in Munich.</p>
+        <div class="footer-social">
+          <a href="#" class="footer-social-btn" title="LinkedIn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+          <a href="#" class="footer-social-btn" title="Twitter / X">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+          <a href="#" class="footer-social-btn" title="Website">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Event</h5>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#agenda">Agenda</a></li>
+          <li><a href="#speakers">Speakers</a></li>
+          <li><a href="#register">Register</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Information</h5>
+        <ul>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="#contact">FAQ</a></li>
+          <li><a href="#">Sponsorship</a></li>
+          <li><a href="#">Press</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Legal</h5>
+        <ul>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Imprint</a></li>
+          <li><a href="#">Cookie Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 SUMMIT 26. All rights reserved.</p>
+      <div class="footer-bottom-links">
+        <a href="#">Privacy</a>
+        <a href="#">Imprint</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ─── BACK TO TOP ──────────────────────────────────────────────────────── -->
+<button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">&#8679;</button>
+
+<!-- ════════════════════════════════════════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════════════════════════════════════════ -->
+<script>
+  /* ── Navbar scroll state ─────────────────────────────────────────────────── */
+  const navbar   = document.getElementById('navbar');
+  const backTop  = document.getElementById('back-to-top');
+
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    navbar.classList.toggle('scrolled', y > 50);
+    backTop.classList.toggle('visible', y > 600);
+  });
+
+  /* ── Hamburger menu ──────────────────────────────────────────────────────── */
+  const hamburger = document.getElementById('hamburger');
+  const navLinks  = document.getElementById('nav-links');
+  let menuOpen = false;
+
+  hamburger.addEventListener('click', () => {
+    menuOpen = !menuOpen;
+    navLinks.classList.toggle('open', menuOpen);
+    // animate hamburger → X
+    const spans = hamburger.querySelectorAll('span');
+    if (menuOpen) {
+      spans[0].style.cssText = 'transform:translateY(7px) rotate(45deg)';
+      spans[1].style.cssText = 'opacity:0';
+      spans[2].style.cssText = 'transform:translateY(-7px) rotate(-45deg)';
+    } else {
+      spans.forEach(s => s.style.cssText = '');
+    }
+  });
+
+  // Close on nav link click
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      menuOpen = false;
+      navLinks.classList.remove('open');
+      hamburger.querySelectorAll('span').forEach(s => s.style.cssText = '');
+    });
+  });
+
+  /* ── FAQ accordion ───────────────────────────────────────────────────────── */
+  function toggleFaq(questionEl) {
+    const item = questionEl.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+    // Open clicked if it was closed
+    if (!isOpen) item.classList.add('open');
+  }
+
+  /* ── Form submission ─────────────────────────────────────────────────────── */
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+    const btn  = form.querySelector('.form-submit');
+    const note = form.querySelector('.form-note');
+
+    btn.textContent = 'Sending…';
+    btn.disabled    = true;
+
+    try {
+      const res  = await fetch('submit.php', {
+        method:  'POST',
+        body:    new FormData(form),
+      });
+      const data = await res.json();
+
+      if (data.ok) {
+        btn.textContent      = '✓ Registration Sent!';
+        btn.style.background = 'linear-gradient(135deg,#22c55e,#16a34a)';
+        btn.style.boxShadow  = '0 6px 28px rgba(34,197,94,0.4)';
+        note.innerHTML       = `Thanks, <strong style="color:#fff;">${data.name}</strong>! We'll be in touch within 24 hours.`;
+        note.style.color     = 'rgba(255,255,255,0.75)';
+        form.reset();
+        setTimeout(() => {
+          btn.disabled         = false;
+          btn.textContent      = 'Register Now →';
+          btn.style.background = '';
+          btn.style.boxShadow  = '';
+          note.innerHTML       = "We'll confirm your registration within 24 hours.";
+          note.style.color     = '';
+        }, 6000);
+      } else {
+        // Show error inline
+        note.innerHTML   = `⚠️ ${data.error}`;
+        note.style.color = '#fca5a5';
+        btn.disabled     = false;
+        btn.textContent  = 'Register Now →';
+      }
+    } catch (err) {
+      note.innerHTML   = '⚠️ Network error. Please try again.';
+      note.style.color = '#fca5a5';
+      btn.disabled     = false;
+      btn.textContent  = 'Register Now →';
+    }
+  }
+
+  /* ── Scroll-reveal (IntersectionObserver) ────────────────────────────────── */
+  const revealTargets = document.querySelectorAll(
+    '.feature-card, .agenda-card, .speaker-card, .contact-item, .faq-item'
+  );
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = entry.target.style.transform
+          ? entry.target.style.transform.replace('translateY(24px)', 'translateY(0)')
+          : '';
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  revealTargets.forEach((el, i) => {
+    el.style.opacity = '0';
+    el.style.transition += `, opacity 0.5s ease ${i * 0.05}s, transform 0.5s ease ${i * 0.05}s`;
+    observer.observe(el);
+  });
+
+  /* ── Active nav link on scroll ───────────────────────────────────────────── */
+  const sections = ['about','agenda','speakers','register','contact'].map(id => document.getElementById(id));
+  const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
+
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY + 100;
+    let current = '';
+    sections.forEach(s => { if (s && scrollY >= s.offsetTop) current = s.id; });
+    navAnchors.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current
+        ? 'var(--cyan)'
+        : 'rgba(255,255,255,0.8)';
+    });
+  }, { passive: true });
+</script>
+</body>
+</html>
