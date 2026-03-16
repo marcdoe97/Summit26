@@ -2,21 +2,23 @@
 declare(strict_types=1);
 header('Content-Type: application/json; charset=utf-8');
 
-// ─── Only accept POST ──────────────────────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     echo json_encode(['ok' => false, 'error' => 'Method not allowed']);
     exit;
 }
 
-// ─── Rate limiting (simple IP-based, 5 submissions per hour) ──────────────
-$rateFile = __DIR__ . '/data/rate_' . md5($_SERVER['REMOTE_ADDR'] ?? '') . '.json';
+require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/email_builder.php';
+
+// ── Rate limiting: 5 submissions per hour per IP ───────────────────────────
+$rateFile = __DIR__ . '/data/rate_' . md5($_SERVER['REMOTE_ADDR'] ?? 'unknown') . '.json';
 $now      = time();
+$window   = 3600;
 $limit    = 5;
-$window   = 3600; // 1 hour
 
 if (file_exists($rateFile)) {
-    $rate = json_decode(file_get_contents($rateFile), true);
+    $rate         = json_decode(file_get_contents($rateFile), true);
     $rate['hits'] = array_filter($rate['hits'] ?? [], fn($t) => $now - $t < $window);
     if (count($rate['hits']) >= $limit) {
         http_response_code(429);
@@ -29,22 +31,22 @@ if (file_exists($rateFile)) {
 $rate['hits'][] = $now;
 file_put_contents($rateFile, json_encode($rate), LOCK_EX);
 
-// ─── Sanitize & validate input ─────────────────────────────────────────────
-function clean(string $val): string {
+// ── Validate ───────────────────────────────────────────────────────────────
+function cleanField(string $val): string {
     return trim(strip_tags($val));
 }
 
-$fname   = clean($_POST['fname']   ?? '');
-$lname   = clean($_POST['lname']   ?? '');
+$fname   = cleanField($_POST['fname']   ?? '');
+$lname   = cleanField($_POST['lname']   ?? '');
 $email   = filter_var(trim($_POST['email'] ?? ''), FILTER_VALIDATE_EMAIL);
-$company = clean($_POST['company'] ?? '');
-$role    = clean($_POST['role']    ?? '');
-$message = clean($_POST['message'] ?? '');
+$company = cleanField($_POST['company'] ?? '');
+$role    = cleanField($_POST['role']    ?? '');
+$message = cleanField($_POST['message'] ?? '');
 
 $errors = [];
-if (empty($fname))  $errors[] = 'First name is required.';
-if (empty($lname))  $errors[] = 'Last name is required.';
-if (!$email)        $errors[] = 'A valid email address is required.';
+if (empty($fname)) $errors[] = 'First name is required.';
+if (empty($lname)) $errors[] = 'Last name is required.';
+if (!$email)       $errors[] = 'A valid email address is required.';
 
 if (!empty($errors)) {
     http_response_code(422);
@@ -52,37 +54,12 @@ if (!empty($errors)) {
     exit;
 }
 
-// ─── Ensure data directory exists ─────────────────────────────────────────
-$dataDir = __DIR__ . '/data';
-if (!is_dir($dataDir)) {
-    mkdir($dataDir, 0750, true);
-}
-
-// ─── SQLite connection ─────────────────────────────────────────────────────
-$dbPath = $dataDir . '/registrations.db';
-
+// ── Save to DB ─────────────────────────────────────────────────────────────
 try {
-    $pdo = new PDO('sqlite:' . $dbPath);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $pdo->exec('PRAGMA journal_mode=WAL;'); // Better concurrent write handling
+    $pdo = getDb();
 
-    // Create table if it doesn't exist
-    $pdo->exec("
-        CREATE TABLE IF NOT EXISTS registrations (
-            id        INTEGER PRIMARY KEY AUTOINCREMENT,
-            fname     TEXT    NOT NULL,
-            lname     TEXT    NOT NULL,
-            email     TEXT    NOT NULL,
-            company   TEXT,
-            role      TEXT,
-            message   TEXT,
-            ip        TEXT,
-            created   TEXT    NOT NULL DEFAULT (datetime('now'))
-        )
-    ");
-
-    // Check for duplicate email
-    $check = $pdo->prepare('SELECT id FROM registrations WHERE email = ? LIMIT 1');
+    // Duplicate email check
+    $check = $pdo->prepare("SELECT id FROM registrations WHERE email = ? LIMIT 1");
     $check->execute([$email]);
     if ($check->fetch()) {
         http_response_code(409);
@@ -90,20 +67,25 @@ try {
         exit;
     }
 
-    // Insert registration
-    $stmt = $pdo->prepare("
+    $pdo->prepare("
         INSERT INTO registrations (fname, lname, email, company, role, message, ip)
         VALUES (?, ?, ?, ?, ?, ?, ?)
-    ");
-    $stmt->execute([
+    ")->execute([
         $fname,
         $lname,
         (string) $email,
         $company,
         $role,
         $message,
-        $_SERVER['REMOTE_ADDR'] ?? ''
+        $_SERVER['REMOTE_ADDR'] ?? '',
     ]);
+
+    // ── Send confirmation email (non-blocking: failure does not break registration) ──
+    try {
+        sendConfirmationEmail((string) $email, $fname . ' ' . $lname, $pdo);
+    } catch (Throwable $e) {
+        error_log('Summit26 email exception: ' . $e->getMessage());
+    }
 
 } catch (PDOException $e) {
     error_log('Summit26 DB error: ' . $e->getMessage());
@@ -112,8 +94,4 @@ try {
     exit;
 }
 
-// ─── Success ───────────────────────────────────────────────────────────────
-echo json_encode([
-    'ok'   => true,
-    'name' => $fname
-]);
+echo json_encode(['ok' => true, 'name' => $fname]);
