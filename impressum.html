@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Impressum – SUMMIT 26</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blue:   #0066CC;
+      --cyan:   #00B4D8;
+      --dark:   #0B132B;
+      --dark2:  #111827;
+      --muted:  #64748B;
+      --light:  #F8FAFC;
+      --border: rgba(0,102,204,0.15);
+      --grad-primary: linear-gradient(135deg, #0066CC 0%, #00B4D8 100%);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body { font-family: 'Inter', sans-serif; background: var(--light); color: var(--dark2); line-height: 1.6; }
+    h1, h2, h3 { font-family: 'Sora', sans-serif; line-height: 1.2; letter-spacing: -0.02em; }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Top Bar ── */
+    .topbar {
+      background: var(--dark);
+      padding: 18px 0;
+    }
+    .topbar-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .topbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Sora', sans-serif;
+      font-weight: 800;
+      font-size: 1.15rem;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+    .topbar-logo img { height: 34px; width: auto; object-fit: contain; border-radius: 5px; }
+    .topbar-logo span { color: var(--cyan); }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255,255,255,0.6);
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: #fff; text-decoration: none; }
+
+    /* ── Content ── */
+    .page-content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 64px 24px 80px;
+    }
+    .page-label {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 12px;
+    }
+    .page-content h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+    .divider {
+      height: 3px;
+      width: 48px;
+      background: var(--grad-primary);
+      border-radius: 2px;
+      margin: 20px 0 40px;
+    }
+    .section-block {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 32px 36px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 12px rgba(0,102,204,0.06);
+    }
+    .section-block h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eef2f7;
+    }
+    .section-block p {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+    .section-block p + p { margin-top: 10px; }
+
+    /* ── Footer ── */
+    .page-footer {
+      background: var(--dark);
+      padding: 28px 24px;
+      text-align: center;
+    }
+    .page-footer p { font-size: 0.82rem; color: rgba(255,255,255,0.3); }
+    .page-footer a { color: rgba(255,255,255,0.45); }
+    .page-footer a:hover { color: var(--cyan); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="topbar-logo">
+      <img src="Logo.jpeg" alt="Summit26 Logo">
+      SUMMIT<span>26</span>
+    </a>
+    <a href="index.html" class="back-link">
+      ← Zurück zur Startseite
+    </a>
+  </div>
+</div>
+
+<div class="page-content">
+  <span class="page-label">Rechtliches</span>
+  <h1>Impressum</h1>
+  <div class="divider"></div>
+
+  <div class="section-block">
+    <h2>Angaben gemäß § 5 TMG</h2>
+    <p>
+      <strong>Hochschule Mainz – University of Applied Sciences</strong><br>
+      Lucy-Hillebrand-Straße 2<br>
+      55128 Mainz<br>
+      Deutschland
+    </p>
+  </div>
+
+  <div class="section-block">
+    <h2>Kontakt</h2>
+    <p>
+      Telefon: +49 (0) 6131 628-0<br>
+      E-Mail: <a href="mailto:info@hs-mainz.de">info@hs-mainz.de</a><br>
+      Internet: <a href="https://www.hs-mainz.de" target="_blank" rel="noopener">www.hs-mainz.de</a>
+    </p>
+  </div>
+
+  <div class="section-block">
+    <h2>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h2>
+    <p>
+      Hochschule Mainz – University of Applied Sciences<br>
+      Lucy-Hillebrand-Straße 2, 55128 Mainz
+    </p>
+  </div>
+
+  <div class="section-block">
+    <h2>Haftungsausschluss</h2>
+    <p>
+      Die Inhalte dieser Website wurden mit größtmöglicher Sorgfalt erstellt. Für die Richtigkeit,
+      Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen.
+      Als Diensteanbieter sind wir gemäß § 7 Abs. 1 TMG für eigene Inhalte nach den allgemeinen
+      Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht
+      verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen.
+    </p>
+    <p>
+      Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen
+      Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt
+      der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden
+      Rechtsverletzungen werden wir diese Inhalte umgehend entfernen.
+    </p>
+  </div>
+
+  <div class="section-block">
+    <h2>Urheberrecht</h2>
+    <p>
+      Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem
+      deutschen Urheberrecht. Beiträge Dritter sind als solche gekennzeichnet. Die Vervielfältigung,
+      Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes
+      bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.
+    </p>
+  </div>
+
+  <p style="font-size:0.8rem;color:#aaa;margin-top:24px;">Stand: April 2026</p>
+</div>
+
+<footer class="page-footer">
+  <p>
+    &copy; 2026 SUMMIT 26 · Hochschule Mainz &nbsp;|&nbsp;
+    <a href="impressum.html">Impressum</a> &nbsp;|&nbsp;
+    <a href="datenschutz.html">Datenschutz</a>
+  </p>
+</footer>
+
+</body>
+</html>

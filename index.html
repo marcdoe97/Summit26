@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -828,6 +828,49 @@
     .footer-bottom-links a { font-size: 0.83rem; color: rgba(255,255,255,0.3); transition: color 0.2s; }
     .footer-bottom-links a:hover { color: var(--cyan); }
 
+    /* Register CTA box */
+    .register-cta-box {
+      text-align: center;
+      padding: 48px 32px;
+    }
+    .register-cta-box .cta-icon {
+      font-size: 3.5rem;
+      margin-bottom: 24px;
+    }
+    .register-cta-box h3 {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+    .register-cta-box p {
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 32px;
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+    .btn-forms {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #fff;
+      color: var(--blue);
+      padding: 16px 40px;
+      border-radius: 50px;
+      font-family: 'Sora', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .btn-forms:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 40px rgba(0,0,0,0.3);
+    }
+    .btn-forms svg { flex-shrink: 0; }
+
     /* ─── BACK TO TOP ────────────────────────────────────────────────────────── */
     #back-to-top {
       position: fixed;
@@ -898,7 +941,10 @@
 ════════════════════════════════════════════════════════════════════════════ -->
 <nav id="navbar">
   <div class="container nav-inner">
-    <a href="#" class="nav-logo">SUMMIT<span>26</span></a>
+    <a href="#" class="nav-logo" style="display:flex;align-items:center;gap:10px;">
+      <img src="Logo.jpeg" alt="Summit26 Logo" style="height:38px;width:auto;object-fit:contain;border-radius:6px;">
+      SUMMIT<span>26</span>
+    </a>
     <ul class="nav-links" id="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#agenda">Agenda</a></li>
@@ -955,7 +1001,7 @@
   </svg>
 
   <div class="container hero-content">
-    <div class="hero-badge">📅 &nbsp;September 18–19, 2026 · Munich</div>
+    <div class="hero-badge">📅 &nbsp;19. – 20. Juni 2026 · Hochschule Mainz</div>
     <span class="hero-year">THE CONFERENCE FOR</span>
     <h1 class="hero-title">
       <span class="gradient-text">SUMMIT</span><br>
@@ -1059,7 +1105,7 @@
 
     <!-- Day 1 -->
     <h3 style="text-align:center;font-size:1rem;font-weight:600;color:var(--blue);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:36px;">
-      Day 1 &mdash; September 18
+      Tag 1 &mdash; 19. Juni 2026
     </h3>
     <div class="agenda-timeline">
       <div class="timeline-line"></div>
@@ -1131,7 +1177,7 @@
 
     <!-- Day 2 -->
     <h3 style="text-align:center;font-size:1rem;font-weight:600;color:var(--blue);letter-spacing:0.08em;text-transform:uppercase;margin:56px 0 36px;">
-      Day 2 &mdash; September 19
+      Tag 2 &mdash; 20. Juni 2026
     </h3>
     <div class="agenda-timeline">
       <div class="timeline-line"></div>
@@ -1355,47 +1401,29 @@
       </div>
     </div>
     <div class="register-right">
-      <p class="form-title">Register &amp; Get in Touch</p>
-      <form id="register-form" onsubmit="handleSubmit(event)">
-        <div class="form-row">
-          <div class="form-group">
-            <label for="fname">First Name</label>
-            <input type="text" id="fname" name="fname" placeholder="Jane" required />
-          </div>
-          <div class="form-group">
-            <label for="lname">Last Name</label>
-            <input type="text" id="lname" name="lname" placeholder="Doe" required />
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="email">Email Address</label>
-          <input type="email" id="email" name="email" placeholder="jane@company.com" required />
-        </div>
-        <div class="form-group">
-          <label for="company">Company</label>
-          <input type="text" id="company" name="company" placeholder="Acme Corp" />
-        </div>
-        <div class="form-group">
-          <label for="role">Your Role</label>
-          <select id="role" name="role">
-            <option value="" disabled selected>Select your role…</option>
-            <option>Engineer / Developer</option>
-            <option>Product Manager</option>
-            <option>CTO / VP Engineering</option>
-            <option>CEO / Founder</option>
-            <option>Researcher / Scientist</option>
-            <option>Investor</option>
-            <option>Student</option>
-            <option>Other</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="message">Message or Questions (optional)</label>
-          <textarea id="message" name="message" placeholder="Anything you'd like to know about the summit…"></textarea>
-        </div>
-        <button type="submit" class="btn btn-orange-lg form-submit">Register Now &rarr;</button>
-        <p class="form-note">We'll confirm your registration within 24 hours.</p>
-      </form>
+      <div class="register-cta-box">
+        <div class="cta-icon">📋</div>
+        <h3>Jetzt anmelden</h3>
+        <p>
+          Sichere dir deinen Platz beim SUMMIT 26.<br>
+          Die Anmeldung erfolgt über Microsoft Forms — einfach und schnell.
+        </p>
+        <!-- ⚠️ HIER DEN MICROSOFT FORMS LINK EINSETZEN -->
+        <a href="HIER_MICROSOFT_FORMS_LINK_EINSETZEN" target="_blank" rel="noopener noreferrer" class="btn-forms">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="3" width="8" height="8" rx="1" fill="#0066CC"/>
+            <rect x="13" y="3" width="8" height="8" rx="1" fill="#00B4D8"/>
+            <rect x="3" y="13" width="8" height="8" rx="1" fill="#6B5B95"/>
+            <rect x="13" y="13" width="8" height="8" rx="1" fill="#FF6B35"/>
+          </svg>
+          Zur Anmeldung (Microsoft Forms)
+        </a>
+        <p style="margin-top:20px;font-size:0.8rem;color:rgba(255,255,255,0.35);">
+          Du wirst zu Microsoft Forms weitergeleitet. Deine Daten werden gemäß unserer
+          <a href="datenschutz.html" style="color:rgba(255,255,255,0.55);text-decoration:underline;">Datenschutzerklärung</a>
+          verarbeitet.
+        </p>
+      </div>
     </div>
   </div>
 </section>
@@ -1422,14 +1450,14 @@
             <div class="contact-icon">📍</div>
             <div>
               <h5>Location</h5>
-              <p>Munich Convention Center<br>Am Messesee 2, 81829 München</p>
+              <p>Hochschule Mainz – University of Applied Sciences<br>Lucy-Hillebrand-Straße 2, 55128 Mainz</p>
             </div>
           </div>
           <div class="contact-item">
             <div class="contact-icon">📅</div>
             <div>
               <h5>Date</h5>
-              <p>September 18 – 19, 2026</p>
+              <p>19. – 20. Juni 2026</p>
             </div>
           </div>
         </div>
@@ -1461,7 +1489,7 @@
             <div class="faq-icon">+</div>
           </div>
           <div class="faq-answer">
-            <p>The conference takes place at the Munich Convention Center (Messe München), one of Europe's largest and best-connected conference venues, with direct access from the city center by U-Bahn.</p>
+            <p>Die Veranstaltung findet an der Hochschule Mainz – University of Applied Sciences, Lucy-Hillebrand-Straße 2, 55128 Mainz statt.</p>
           </div>
         </div>
         <div class="faq-item">
@@ -1504,7 +1532,7 @@
     <div class="footer-top">
       <div class="footer-brand">
         <a href="#" class="nav-logo">SUMMIT<span>26</span></a>
-        <p>The premier conference on automation, autonomous systems, and the future of intelligent technology. September 18–19, 2026 in Munich.</p>
+        <p>Die Konferenz zu Automation, autonomen Systemen und der Zukunft intelligenter Technologie. 19.–20. Juni 2026 an der Hochschule Mainz.</p>
         <div class="footer-social">
           <a href="#" class="footer-social-btn" title="LinkedIn">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
@@ -1536,21 +1564,18 @@
         </ul>
       </div>
       <div class="footer-col">
-        <h5>Legal</h5>
+        <h5>Rechtliches</h5>
         <ul>
-          <li><a href="#">Privacy Policy</a></li>
-          <li><a href="#">Terms of Service</a></li>
-          <li><a href="#">Imprint</a></li>
-          <li><a href="#">Cookie Policy</a></li>
+          <li><a href="datenschutz.html">Datenschutzerklärung</a></li>
+          <li><a href="impressum.html">Impressum</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2026 SUMMIT 26. All rights reserved.</p>
+      <p>&copy; 2026 SUMMIT 26 · Hochschule Mainz</p>
       <div class="footer-bottom-links">
-        <a href="#">Privacy</a>
-        <a href="#">Imprint</a>
-        <a href="#">Terms</a>
+        <a href="datenschutz.html">Datenschutz</a>
+        <a href="impressum.html">Impressum</a>
       </div>
     </div>
   </div>
@@ -1609,53 +1634,6 @@
     document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
     // Open clicked if it was closed
     if (!isOpen) item.classList.add('open');
-  }
-
-  /* ── Form submission ─────────────────────────────────────────────────────── */
-  async function handleSubmit(e) {
-    e.preventDefault();
-    const form = e.target;
-    const btn  = form.querySelector('.form-submit');
-    const note = form.querySelector('.form-note');
-
-    btn.textContent = 'Sending…';
-    btn.disabled    = true;
-
-    try {
-      const res  = await fetch('submit.php', {
-        method:  'POST',
-        body:    new FormData(form),
-      });
-      const data = await res.json();
-
-      if (data.ok) {
-        btn.textContent      = '✓ Registration Sent!';
-        btn.style.background = 'linear-gradient(135deg,#22c55e,#16a34a)';
-        btn.style.boxShadow  = '0 6px 28px rgba(34,197,94,0.4)';
-        note.innerHTML       = `Thanks, <strong style="color:#fff;">${data.name}</strong>! We'll be in touch within 24 hours.`;
-        note.style.color     = 'rgba(255,255,255,0.75)';
-        form.reset();
-        setTimeout(() => {
-          btn.disabled         = false;
-          btn.textContent      = 'Register Now →';
-          btn.style.background = '';
-          btn.style.boxShadow  = '';
-          note.innerHTML       = "We'll confirm your registration within 24 hours.";
-          note.style.color     = '';
-        }, 6000);
-      } else {
-        // Show error inline
-        note.innerHTML   = `⚠️ ${data.error}`;
-        note.style.color = '#fca5a5';
-        btn.disabled     = false;
-        btn.textContent  = 'Register Now →';
-      }
-    } catch (err) {
-      note.innerHTML   = '⚠️ Network error. Please try again.';
-      note.style.color = '#fca5a5';
-      btn.disabled     = false;
-      btn.textContent  = 'Register Now →';
-    }
   }
 
   /* ── Scroll-reveal (IntersectionObserver) ────────────────────────────────── */
